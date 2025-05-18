@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block content %}
+    <h1>Segunda Página</h1>
+    <p>Esta é a segunda página do projeto. Aqui você pode adicionar mais informações ou funcionalidades.</p>
+    <ul>
+        {% for dado in dados %}
+            <li>
+                Nome: {{ dado.nome }}<br>
+                Idade: {{ dado.idade }}<br>
+                Email: {{ dado.email }}<br>
+                Gênero: {{ dado.genero }}
+            </li>
+        {% empty %}
+            <li>Nenhum dado cadastrado.</li>
+        {% endfor %}
+    </ul>
+    <button onclick="window.location.href='{% url 'index' %}'">Voltar para a Página Inicial</button>
+{% endblock %}

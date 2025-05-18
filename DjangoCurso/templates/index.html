@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block content %}
+    <main>
+        <p>This is a simple HTML template.</p>
+        <form method="get">
+            <input type="text" name="filtro" placeholder="Filtrar por nome" value="{{ filtro }}">
+            <button type="submit">Filtrar</button>
+        </form>
+        <button onclick="window.location.href='{% url 'segunda_pagina' %}'">Go to Second Page</button>
+        <ul>
+            {% for dado in dados %}
+                <li>
+                    Nome: {{ dado.nome }}<br>
+                    Idade: {{ dado.idade }}<br>
+                    Email: {{ dado.email }}
+                </li>
+            {% empty %}
+                <li>Nenhum dado cadastrado.</li>
+            {% endfor %}
+        </ul>
+    </main>
+    <footer>
+        <p>&copy; 2025 My Website</p>
+    </footer>
+{% endblock %}
