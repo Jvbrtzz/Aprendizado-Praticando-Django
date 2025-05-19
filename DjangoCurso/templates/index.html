@@ -1,25 +1,37 @@
 {% extends 'base.html' %}
 {% block content %}
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endfor %}
     <main>
-        <p>This is a simple HTML template.</p>
-        <form method="get">
-            <input type="text" name="filtro" placeholder="Filtrar por nome" value="{{ filtro }}">
-            <button type="submit">Filtrar</button>
-        </form>
-        <button onclick="window.location.href='{% url 'segunda_pagina' %}'">Go to Second Page</button>
-        <ul>
+        <div class="mb-4">
+            <p class="lead">This is a simple HTML template.</p>
+            <form method="get" class="row g-2 align-items-center mb-3">
+                <div class="col-auto">
+                    <input type="text" class="form-control" name="filtro" placeholder="Filtrar por nome" value="{{ filtro }}">
+                </div>
+                <div class="col-auto">
+                    <button type="submit" class="btn btn-primary">Filtrar</button>
+                </div>
+            </form>
+            <a href="{% url 'segunda_pagina' %}" class="btn btn-secondary mb-3">Go to Second Page</a>
+        </div>
+        <ul class="list-group">
             {% for dado in dados %}
-                <li>
-                    Nome: {{ dado.nome }}<br>
-                    Idade: {{ dado.idade }}<br>
-                    Email: {{ dado.email }}
+                <li class="list-group-item">
+                    <strong>Nome:</strong> {{ dado.nome }}<br>
+                    <strong>Idade:</strong> {{ dado.idade }}<br>
+                    <strong>Email:</strong> {{ dado.email }}
                 </li>
             {% empty %}
-                <li>Nenhum dado cadastrado.</li>
+                <li class="list-group-item text-muted">Nenhum dado cadastrado.</li>
             {% endfor %}
         </ul>
     </main>
-    <footer>
-        <p>&copy; 2025 My Website</p>
+    <footer class="mt-4 text-center text-muted">
+        &copy; 2025 My Website
     </footer>
 {% endblock %}
