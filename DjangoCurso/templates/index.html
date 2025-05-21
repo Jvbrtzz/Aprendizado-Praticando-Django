@@ -1,11 +1,11 @@
 {% extends 'base.html' %}
 {% block content %}
-    {% for message in messages %}
-        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-            {{ message }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    {% endfor %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
     <main>
         <div class="mb-4">
             <p class="lead">This is a simple HTML template.</p>
@@ -18,6 +18,7 @@
                 </div>
             </form>
             <a href="{% url 'segunda_pagina' %}" class="btn btn-secondary mb-3">Go to Second Page</a>
+            <a href="http://localhost:8000/accounts/github/login/?process=login" class="btn btn-warning mb-3">Login com Github</a>
         </div>
         <ul class="list-group">
             {% for dado in dados %}
