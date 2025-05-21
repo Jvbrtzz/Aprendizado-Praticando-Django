@@ -10,15 +10,20 @@
             margin: 0 auto;
             padding: 0 15px;
         }
+        .header-flex {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
         header h1 {
             font-size: 24px;
             color: #333;
-            margin: 0;
+            margin: 0 0 10px 0;
         }
         header nav ul {
             list-style: none;
             padding: 0;
-            margin: 10px 0 0;
+            margin: 0;
             display: flex;
             gap: 15px;
         }
@@ -33,19 +38,41 @@
         header nav ul li a:hover {
             text-decoration: underline;
         }
+        .user-info {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+        .user-info img {
+            width: 100px;
+
+            border-radius: 50%;
+        }
     </style>
     <div class="container">
         <h1>Bem-vindo ao DjangoCurso</h1>
-        <nav>
-            <ul>
-                <li><a href="{% url 'index' %}">Início</a></li>
-                {% if user.is_authenticated %}
-                    <li><a href="{% url 'logout' %}">Logout</a></li>
-                {% else %}     
-                    <li><a href="{% url 'login' %}">Login</a></li>
-                    <li><a href="{% url 'cadastro' %}">Cadastro</a></li>
-                {% endif %}
-            </ul>
-        </nav>
+        <div class="header-flex">
+            <nav>
+                <ul>
+                    <li><a href="{% url 'index' %}">Início</a></li>
+                    {% if user.is_authenticated %}
+                        <li><a href="{% url 'logout' %}">Logout</a></li>
+                    {% else %}     
+                        <li><a href="{% url 'login' %}">Login</a></li>
+                        <li><a href="{% url 'cadastro' %}">Cadastro</a></li>
+                    {% endif %}
+                    {% if social_data %}
+                        <li><a href="{% url 'github_page' %}">Github</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% if social_data %}
+                <div class="user-info">
+                    <img src="{{ social_data.avatar_url }}" alt="Avatar">
+                    <span>{{ social_data.name|default:social_data.login }}</span>
+                </div>
+            {% endif %}
+        </div>
     </div>
 </header>

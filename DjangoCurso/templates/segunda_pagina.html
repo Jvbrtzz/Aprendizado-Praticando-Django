@@ -2,6 +2,12 @@
 {% block content %}
     <h1>Segunda Página</h1>
     <p>Esta é a segunda página do projeto. Aqui você pode adicionar mais informações ou funcionalidades.</p>
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
     <ul>
         {% for dado in dados %}
             <li>
@@ -14,5 +20,8 @@
             <li>Nenhum dado cadastrado.</li>
         {% endfor %}
     </ul>
+    <div class="logut-btn-container">
+        <a href="{% url 'logout' %}" class="btn btn-danger">Logout</a>
+    </div>
     <button onclick="window.location.href='{% url 'index' %}'">Voltar para a Página Inicial</button>
 {% endblock %}
