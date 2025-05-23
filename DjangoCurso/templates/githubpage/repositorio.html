@@ -55,6 +55,7 @@
                     {% endif %}
                 </td>
                 <td>
+                    <a href="{% url 'editar_repositorio' repo.id %}" class="btn btn-warning btn-sm">Editar</a>
                     <form method="post" action="{% url 'excluir_repositorio' repo.id %}" style="display:inline;">
                         {% csrf_token %}
                         <button type="submit" class="btn btn-danger btn-sm">Excluir</button>
@@ -69,4 +70,5 @@
         </tbody>
     </table>
 </div>
+
 {% endblock %}

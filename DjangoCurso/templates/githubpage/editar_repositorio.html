@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-5">
+    <h2>Editar Repositório</h2>
+    <form method="post" class="row g-3">
+        {% csrf_token %}
+        <div class="col-md-6">
+            <label for="nome" class="form-label">Nome</label>
+            <input type="text" class="form-control" id="nome" name="nome" value="{{ repo.nome }}" required>
+        </div>
+        <div class="col-md-6">
+            <label for="descricao" class="form-label">Descrição</label>
+            <input type="text" class="form-control" id="descricao" name="descricao" value="{{ repo.descricao }}" required>
+        </div>
+        <div class="col-md-6">
+            <label for="linguagem" class="form-label">Linguagem</label>
+            <input type="text" class="form-control" id="linguagem" name="linguagem" value="{{ repo.linguagem }}" required>
+        </div>
+        <div class="col-md-6">
+            <label for="visibilidade" class="form-label">Visibilidade</label>
+            <select class="form-select" id="visibilidade" name="visibilidade" required>
+                <option value="PU" {% if repo.visibilidade == 'PU' %}selected{% endif %}>Privado</option>
+                <option value="PR" {% if repo.visibilidade == 'PR' %}selected{% endif %}>Público</option>
+            </select>
+        </div>
+        <div class="col-12">
+            <button type="submit" class="btn btn-success">Salvar Alterações</button>
+            <a href="{% url 'repositorio' %}" class="btn btn-secondary">Cancelar</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

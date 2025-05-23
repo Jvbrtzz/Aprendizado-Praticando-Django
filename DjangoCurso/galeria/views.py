@@ -9,12 +9,23 @@ from django.contrib.auth.decorators import login_required
 def index(request):
     filtro = request.GET.get('filtro', '')
     if request.user.is_authenticated:
+        # Repositórios do usuário logado (qualquer visibilidade)
+        meus_repos = Repositorio.objects.filter(usuario=request.user)
+        # Repositórios públicos de outros usuários
+        publicos_outros = Repositorio.objects.filter(visibilidade='PR').exclude(usuario=request.user)
+        # Junta os dois QuerySets
+        repositorios = meus_repos | publicos_outros
+        # Se houver filtro, aplica sobre o nome
         if filtro:
-            repositorios = Repositorio.objects.filter(usuario=request.user, nome__icontains=filtro)
-        else:
-            repositorios = Repositorio.objects.filter(usuario=request.user)
+            repositorios = repositorios.filter(nome__icontains=filtro)
+        # Remove duplicatas (caso algum repositório público seja do próprio usuário)
+        repositorios = repositorios.distinct()
     else:
-        repositorios = Repositorio.objects.none()
+        # Usuário não autenticado vê apenas repositórios públicos
+        if filtro:
+            repositorios = Repositorio.objects.filter(visibilidade='PR', nome__icontains=filtro)
+        else:
+            repositorios = Repositorio.objects.filter(visibilidade='PR')
     return render(request, 'index.html', {'repositorios': repositorios, 'filtro': filtro})
 
 def segunda_pagina(request):
@@ -99,4 +110,17 @@ def excluir_repositorio(request, repo_id):
     if request.method == 'POST':
         repo = get_object_or_404(Repositorio, id=repo_id)
         repo.delete()
-    return redirect('repositorio')  # ajuste para o nome correto da sua url de listagem
+    return redirect('repositorio')  # ajuste para o nome correto da url de listagem
+
+@login_required
+def editar_repositorio(request, repo_id):
+    repo = get_object_or_404(Repositorio, id=repo_id)
+    if request.method == 'POST':
+        repo.nome = request.POST.get('nome')
+        repo.descricao = request.POST.get('descricao')
+        repo.linguagem = request.POST.get('linguagem')
+        repo.visibilidade = request.POST.get('visibilidade')
+        repo.save()
+        messages.success(request, 'Repositório atualizado com sucesso.')
+        return redirect('repositorio')
+    return render(request, 'githubpage/editar_repositorio.html', {'repo': repo})
