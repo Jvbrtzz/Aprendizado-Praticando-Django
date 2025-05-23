@@ -8,11 +8,14 @@ from django.contrib.auth.decorators import login_required
 
 def index(request):
     filtro = request.GET.get('filtro', '')
-    if filtro:
-        repositorio = Repositorio.objects.filter(nome__icontains=filtro)
+    if request.user.is_authenticated:
+        if filtro:
+            repositorios = Repositorio.objects.filter(usuario=request.user, nome__icontains=filtro)
+        else:
+            repositorios = Repositorio.objects.filter(usuario=request.user)
     else:
-        repositorio = Repositorio.objects.all()
-    return render(request, 'index.html', {'repositorios': repositorio, 'filtro': filtro})
+        repositorios = Repositorio.objects.none()
+    return render(request, 'index.html', {'repositorios': repositorios, 'filtro': filtro})
 
 def segunda_pagina(request):
     if not request.user.is_authenticated:
@@ -72,9 +75,9 @@ def logout(request):
     messages.success(request, 'Logout realizado com sucesso.')
     return redirect('login')
 
-@login_required
+
 def repositorio(request):
-    repositorios = Repositorio.objects.all()
+    repositorios = Repositorio.objects.filter(usuario=request.user)
     if request.method == 'POST':
         nome = request.POST.get('nome')
         descricao = request.POST.get('descricao')
@@ -85,6 +88,7 @@ def repositorio(request):
             descricao=descricao,
             linguagem=linguagem,
             visibilidade=visibilidade,
+            usuario=request.user  # Adiciona o usuário autenticado aqui
         )
         repositorio.save()
         messages.success(request, 'Repositório criado com sucesso.')

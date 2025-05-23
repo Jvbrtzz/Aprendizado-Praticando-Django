@@ -18,12 +18,17 @@
                 </div>
             </form>
             <a href="{% url 'segunda_pagina' %}" class="btn btn-secondary mb-3">Go to Second Page</a>
+            {% if not user.is_authenticated %}
             <a href="http://localhost:8000/accounts/github/login/?process=login" class="btn btn-warning mb-3">Login com Github</a>
+            {% endif %}
+
         </div>
         <ul class="list-group">
             {% if user.is_authenticated %}
                 {% for repositorio in repositorios %}
                     <li class="list-group-item">
+                        <strong>ID do Repositório:</strong> {{ repositorio.id }}<br>
+                        <strong>ID do Usuário:</strong> {{ repositorio.usuario.id }}<br>
                         <strong>Nome:</strong> {{ repositorio.nome }}<br>
                         <strong>Descrição:</strong> {{ repositorio.descricao }}<br>
                         <strong>Linguagem:</strong> {{ repositorio.linguagem }}<br>

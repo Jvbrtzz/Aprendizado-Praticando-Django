@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 # Create your models here.
 class Dados(models.Model):
@@ -27,5 +28,7 @@ class Repositorio(models.Model):
     descricao = models.CharField(max_length=100, null=False)
     linguagem = models.CharField(max_length=100, null=False)
     visibilidade = models.CharField(max_length=2, choices=OPCOES_VISIBILIDADE, default='')
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+
     def __str__(self):
         return f"{self.nome} {self.descricao} {self.linguagem} {self.visibilidade}"
