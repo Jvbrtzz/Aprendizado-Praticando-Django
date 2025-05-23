@@ -21,15 +21,27 @@
             <a href="http://localhost:8000/accounts/github/login/?process=login" class="btn btn-warning mb-3">Login com Github</a>
         </div>
         <ul class="list-group">
-            {% for dado in dados %}
-                <li class="list-group-item">
-                    <strong>Nome:</strong> {{ dado.nome }}<br>
-                    <strong>Idade:</strong> {{ dado.idade }}<br>
-                    <strong>Email:</strong> {{ dado.email }}
-                </li>
-            {% empty %}
-                <li class="list-group-item text-muted">Nenhum dado cadastrado.</li>
-            {% endfor %}
+            {% if user.is_authenticated %}
+                {% for repositorio in repositorios %}
+                    <li class="list-group-item">
+                        <strong>Nome:</strong> {{ repositorio.nome }}<br>
+                        <strong>Descrição:</strong> {{ repositorio.descricao }}<br>
+                        <strong>Linguagem:</strong> {{ repositorio.linguagem }}<br>
+                        <strong>Visibilidade:</strong>
+                        {% if repositorio.visibilidade == 'PU' %}
+                            Privado
+                        {% elif repositorio.visibilidade == 'PR' %}
+                            Público
+                        {% else %}
+                            {{ repositorio.visibilidade }}
+                        {% endif %}
+                    </li>
+                {% empty %}
+                    <li class="list-group-item text-muted">Nenhum repositório cadastrado.</li>
+                {% endfor %}
+            {% else %}
+                <li class="list-group-item text-muted">Faça login para ver os repositórios.</li>
+            {% endif %}
         </ul>
     </main>
     <footer class="mt-4 text-center text-muted">

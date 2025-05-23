@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">Cadastrar Novo Repositório</h2>
+    <form method="post" class="row g-3 mb-5">
+        {% csrf_token %}
+        <div class="col-md-6">
+            <label for="nome" class="form-label">Nome</label>
+            <input type="text" class="form-control" id="nome" name="nome" required>
+        </div>
+        <div class="col-md-6">
+            <label for="descricao" class="form-label">Descrição</label>
+            <input type="text" class="form-control" id="descricao" name="descricao" required>
+        </div>
+        <div class="col-md-6">
+            <label for="linguagem" class="form-label">Linguagem</label>
+            <input type="text" class="form-control" id="linguagem" name="linguagem" required>
+        </div>
+        <div class="col-md-6">
+            <label for="visibilidade" class="form-label">Visibilidade</label>
+            <select class="form-select" id="visibilidade" name="visibilidade" required>
+                <option value="">Selecione...</option>
+                <option value="PU">Privado</option>
+                <option value="PR">Público</option>
+            </select>
+        </div>
+        <div class="col-12">
+            <button type="submit" class="btn btn-primary">Cadastrar</button>
+        </div>
+    </form>
+
+    <h3 class="mb-3">Repositórios Cadastrados</h3>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Descrição</th>
+                <th>Linguagem</th>
+                <th>Visibilidade</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for repo in repositorios %}
+            <tr>
+                <td>{{ repo.nome }}</td>
+                <td>{{ repo.descricao }}</td>
+                <td>{{ repo.linguagem }}</td>
+                <td>
+                    {% if repo.visibilidade == 'PU' %}
+                        Privado
+                    {% elif repo.visibilidade == 'PR' %}
+                        Público
+                    {% else %}
+                        -
+                    {% endif %}
+                </td>
+                <td>
+                    <form method="post" action="{% url 'excluir_repositorio' repo.id %}" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger btn-sm">Excluir</button>
+                    </form>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="4" class="text-center text-muted">Nenhum repositório cadastrado.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

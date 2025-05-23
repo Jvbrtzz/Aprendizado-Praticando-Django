@@ -14,3 +14,18 @@ class Dados(models.Model):
 
     def __str__(self):
         return f"{self.nome} {self.idade} {self.email}"
+
+
+# Create your models here.
+class Repositorio(models.Model):
+    OPCOES_VISIBILIDADE = (
+        ('PU', 'Private'),
+        ('PR', 'Public'),
+    )
+
+    nome = models.CharField(max_length=100, null=False)
+    descricao = models.CharField(max_length=100, null=False)
+    linguagem = models.CharField(max_length=100, null=False)
+    visibilidade = models.CharField(max_length=2, choices=OPCOES_VISIBILIDADE, default='')
+    def __str__(self):
+        return f"{self.nome} {self.descricao} {self.linguagem} {self.visibilidade}"

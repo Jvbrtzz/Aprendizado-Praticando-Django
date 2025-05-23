@@ -1,5 +1,5 @@
-from django.shortcuts import redirect, render
-from galeria.models import Dados
+from django.shortcuts import redirect, render, get_object_or_404
+from galeria.models import Dados, Repositorio
 from galeria.forms import LoginForms, CadastroForms
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
@@ -9,10 +9,10 @@ from django.contrib.auth.decorators import login_required
 def index(request):
     filtro = request.GET.get('filtro', '')
     if filtro:
-        galeria = Dados.objects.filter(nome__icontains=filtro)
+        repositorio = Repositorio.objects.filter(nome__icontains=filtro)
     else:
-        galeria = Dados.objects.all()
-    return render(request, 'index.html', {'dados': galeria, 'filtro': filtro})
+        repositorio = Repositorio.objects.all()
+    return render(request, 'index.html', {'repositorios': repositorio, 'filtro': filtro})
 
 def segunda_pagina(request):
     if not request.user.is_authenticated:
@@ -71,3 +71,28 @@ def logout(request):
     auth_logout(request)
     messages.success(request, 'Logout realizado com sucesso.')
     return redirect('login')
+
+@login_required
+def repositorio(request):
+    repositorios = Repositorio.objects.all()
+    if request.method == 'POST':
+        nome = request.POST.get('nome')
+        descricao = request.POST.get('descricao')
+        linguagem = request.POST.get('linguagem')
+        visibilidade = request.POST.get('visibilidade')
+        repositorio = Repositorio(
+            nome=nome,
+            descricao=descricao,
+            linguagem=linguagem,
+            visibilidade=visibilidade,
+        )
+        repositorio.save()
+        messages.success(request, 'Repositório criado com sucesso.')
+        return redirect('repositorio')
+    return render(request, 'githubpage/repositorio.html', {'repositorios': repositorios})
+
+def excluir_repositorio(request, repo_id):
+    if request.method == 'POST':
+        repo = get_object_or_404(Repositorio, id=repo_id)
+        repo.delete()
+    return redirect('repositorio')  # ajuste para o nome correto da sua url de listagem
